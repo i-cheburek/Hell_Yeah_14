@@ -1,0 +1,304 @@
+# mADE bY shItbUREK (aka @ichreburek)
+
+########################################################################### AMMO
+
+- type: entity
+  id: CartridgeHeavyRevolverST
+  name: bullet (.127 ST)
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 17
+        Slash: 20
+        Structural: 15
+  - type: StaminaDamageOnCollide
+    damage: 10
+    
+- type: entity
+  id: CartridgeHeavyRevolverAL
+  name: bullet (.127 AL)
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 7
+        Slash: 30
+        Structural: 5
+  - type: StaminaDamageOnCollide
+    damage: 15
+    
+- type: entity
+  id: CartridgeHeavyRevolverAP
+  name: bullet (.127 AP)
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Slash: 30
+        Structural: 20
+    ignoreResistances: true
+  - type: StaminaDamageOnCollide
+    damage: 6
+    
+################ CARTIGES
+    
+- type: entity
+  id: HeavyRevolverBaseCartige
+  name: cartridge (.127 rifle)
+  parent: [ BaseCartridge, BaseRestrictedContraband ]
+  abstract: true
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - HeavyRevolverBullet
+  - type: CartridgeAmmo
+    proto: HeavyRevolverBullet
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals
+  
+- type: entity
+  id: HeavyRevolverBullet
+  name: патрон стандартный(.127)
+  parent: HeavyRevolverBaseCartige
+  components:
+  - type: CartridgeAmmo
+    proto: CartridgeHeavyRevolverST
+    
+- type: entity
+  id: HeavyRevolverBulletAL
+  name: патрон алюминиевый(.127)
+  parent: HeavyRevolverBaseCartige
+  components:
+  - type: CartridgeAmmo
+    proto: CartridgeHeavyRevolverAL
+    
+- type: entity
+  id: HeavyRevolverBulletAP
+  name: патрон бронебойный(.127)
+  parent: HeavyRevolverBaseCartige
+  components:
+  - type: CartridgeAmmo
+    proto: CartridgeHeavyRevolverAP
+    
+############ MAGS
+    
+- type: entity
+  id: BaseMagazineHeavyAssaultRifle
+  name: "magazine (.127 rifle)"
+  parent: [ BaseItem, BaseRestrictedContraband ]
+  abstract: true
+  components:
+  - type: Tag
+    tags:
+      - MagazineHeavyAssaultRifle
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+        - HeavyRevolverBullet
+    proto: HeavyRevolverBullet
+    capacity: 20
+  - type: Item
+    size: Small
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/LightRifle/light_rifle_mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+  
+- type: entity
+  id: MagazineHeavyAssaultRifle
+  name: "(магазин .127) СТ"
+  parent: BaseMagazineHeavyAssaultRifle
+  components:
+  - type: BallisticAmmoProvider
+    proto: HeavyRevolverBullet
+  - type: Sprite
+    layers:
+    - state: red
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+      
+- type: entity
+  id: MagazineHeavyAssaultRifleAL
+  name: "(магазин .127) АЛ"
+  parent: BaseMagazineHeavyAssaultRifle
+  components:
+  - type: BallisticAmmoProvider
+    proto: HeavyRevolverBulletAL
+  - type: Sprite
+    layers:
+    - state: red
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+      
+- type: entity
+  id: MagazineHeavyAssaultRifleAP
+  name: "(магазин .127) БР"
+  parent: BaseMagazineHeavyAssaultRifle
+  components:
+  - type: BallisticAmmoProvider
+    proto: HeavyRevolverBulletAP
+  - type: Sprite
+    layers:
+    - state: red
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    
+################################################################################# RSH-12
+    
+- type: entity
+  name: BaseWeaponHeavyRevolver
+  parent: BaseItem
+  id: BaseWeaponHeavyRevolver
+  description: A rooty tooty point and shooty.
+  abstract: true
+  components:
+  - type: Sprite
+    state: icon
+  - type: Item
+    size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
+  - type: Tag
+    tags:
+    - Sidearm
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Revolvers/deckard.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+    - Belt
+  - type: AmmoCounter
+  - type: Gun
+    selectedMode: SemiAuto
+    fireRate: 1.5
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/revolver.ogg
+  - type: UseDelay
+    delay: 0.66
+  - type: ContainerContainer
+    containers:
+      revolver-ammo: !type:Container
+  - type: RevolverAmmoProvider
+    whitelist:
+      tags:
+        - HeavyRevolverBullet
+    proto: HeavyRevolverBullet
+    capacity: 6
+    chambers: [ True, True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null, null ]
+    soundEject:
+      path: /Audio/Weapons/Guns/MagOut/revolver_magout.ogg
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/revolver_magin.ogg
+  - type: StaticPrice
+    price: 500
+    
+- type: entity
+  name: RSH-12
+  parent: [BaseWeaponHeavyRevolver, BaseSecurityCommandContraband]
+  id: WeaponRevolverHeavy
+  description: «Тяжесть — это хорошо! Тяжесть — это надёжно! Даже если не выстрелит — таким всегда можно врезать по башке.» использует (.127)
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Revolvers/deckard.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-unshaded-3
+      map: ["enum.GunVisualLayers.MagUnshaded"]
+      shader: unshaded
+  - type: Gun
+    fireRate: 2
+  - type: RevolverAmmoProvider
+    capacity: 5
+    chambers: [ True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null ]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 4
+    zeroVisible: true
+  - type: Appearance
+  - type: StaticPrice
+    price: 1500
+    
+############################################################# SHAK-12
+    
+- type: entity
+  name: SHAK-12
+  parent: [BaseWeaponRifle, BaseRestrictedContraband]
+  id: WeaponRifleSHAK
+  description: uses (.127)
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
+  - type: Gun
+    fireRate: 5
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rifle2.ogg
+  - type: ChamberMagazineAmmoProvider
+    soundRack:
+      path: /Audio/Weapons/Guns/Cock/ltrifle_cock.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineHeavyAssaultRifle
+        insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineHeavyAssaultRifle
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        startingItem: HeavyRevolverBullet
+        priority: 1
+        whitelist:
+          tags:
+            - HeavyRevolverBullet
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
